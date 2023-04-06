@@ -1,23 +1,28 @@
-import logo from './logo.svg';
 import './App.css';
+import { useState } from 'react';
+import ExpenseInput from './Components/ExpenseInput/ExpenseInput';
+import ExpenseTable from './Components/ExpenseTable/ExpenseTable';
+import ExpenseCalculator from './Components/ExpenseCalculator/ExpenseCalculator';
 
 function App() {
+  const [expenses, setExpenses] = useState([])
+  const [totalAmount, setTotalAmount] = useState(0)
+
+  const addExpenseHandler = (expense) => {
+    setExpenses((prevExpenses) => {
+      return [...prevExpenses, expense];
+    });
+  };
+
+  const handleDeleteExpense = (expenseToDelete) => {
+    setExpenses(expenses.filter((expense) => expense !== expenseToDelete))
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ExpenseInput onAddExpense={addExpenseHandler} />
+      <ExpenseTable expenses={expenses} onDeleteExpense={handleDeleteExpense} />
+      <ExpenseCalculator key={expenses.length} expenses={expenses}/>
     </div>
   );
 }
